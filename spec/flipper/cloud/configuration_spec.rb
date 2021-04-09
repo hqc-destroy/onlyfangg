@@ -127,30 +127,84 @@ RSpec.describe Flipper::Cloud::Configuration do
     end
   end
 
+<<<<<<< HEAD
   it "defaults sync_method to :poll" do
     instance = described_class.new(required_options)
+=======
+  describe 'sync_method' do
+    it "defaults to to poll" do
+      instance = described_class.new(required_options)
+>>>>>>> 66787302... Refactor configuration
 
-    expect(instance.sync_method).to eq(:poll)
-  end
+      expect(instance.sync_method).to eq(:poll)
+    end
 
+<<<<<<< HEAD
   it "sets sync_method to :webhook if sync_secret provided" do
     instance = described_class.new(required_options.merge({
       sync_secret: "secret",
     }))
+=======
+    it "can be set to :webhook" do
+      memory_adapter = Flipper::Adapters::Memory.new
+>>>>>>> 66787302... Refactor configuration
 
-    expect(instance.sync_method).to eq(:webhook)
-    expect(instance.adapter).to be_instance_of(Flipper::Adapters::DualWrite)
-  end
+      instance = described_class.new(required_options.merge({
+        sync_secret: "secret",
+        sync_method: :webhook,
+        local_adapter: memory_adapter,
+      }))
 
+<<<<<<< HEAD
   it "sets sync_method to :webhook if FLIPPER_CLOUD_SYNC_SECRET set" do
     with_modified_env "FLIPPER_CLOUD_SYNC_SECRET" => "abc" do
       instance = described_class.new(required_options)
+=======
+      expect(instance.sync_method).to eq(:webhook)
+      expect(instance.adapter).to be_instance_of(Flipper::Adapters::DualWrite)
+    end
+
+    it "raises ArgumentError for invalid value" do
+      expect {
+        described_class.new(required_options.merge(sync_method: :foo))
+      }.to raise_error(ArgumentError, "Unsupported sync_method. Valid options are (poll, webhook)")
+    end
+
+    it "can use ENV var for sync_method" do
+      with_modified_env "FLIPPER_CLOUD_SYNC_METHOD" => "webhook" do
+        instance = described_class.new(required_options.merge({
+          sync_secret: "secret",
+        }))
+
+        expect(instance.sync_method).to eq(:webhook)
+      end
+    end
+
+    it "can use string sync_method instead of symbol" do
+      memory_adapter = Flipper::Adapters::Memory.new
+      instance = described_class.new(required_options.merge({
+        sync_secret: "secret",
+        sync_method: "webhook",
+        local_adapter: memory_adapter,
+      }))
+>>>>>>> 66787302... Refactor configuration
 
       expect(instance.sync_method).to eq(:webhook)
       expect(instance.adapter).to be_instance_of(Flipper::Adapters::DualWrite)
     end
+
+<<<<<<< HEAD
+=======
+    it 'defaults to :poll if FLIPPER_CLOUD_SYNC_SECRET env variable is set' do
+      with_modified_env 'FLIPPER_CLOUD_SYNC_SECRET' => 'xyz' do
+        instance = described_class.new(required_options)
+
+        expect(instance.sync_method).to eq(:webhook)
+      end
+    end
   end
 
+>>>>>>> 66787302... Refactor configuration
   it "can set sync_secret" do
     instance = described_class.new(required_options.merge(sync_secret: "from_config"))
       expect(instance.sync_secret).to eq("from_config")
