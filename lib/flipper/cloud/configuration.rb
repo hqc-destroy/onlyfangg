@@ -63,13 +63,11 @@ module Flipper
       # occur or not.
       attr_accessor :sync_secret
 
-      attr_accessor :app_path
-
       def initialize(options = {})
         @token = options.fetch(:token) { ENV["FLIPPER_CLOUD_TOKEN"] }
 
         if @token.nil?
-          raise ArgumentError, "Flipper::Cloud token is missing. Please set FLIPPER_CLOUD_TOKEN or provide the token (e.g. Flipper::Cloud.new('token'))."
+          raise ArgumentError, "Flipper::Cloud token is missing. Please set FLIPPER_CLOUD_TOKEN or provide the token (e.g. Flipper::Cloud.new(token: 'token'))."
         end
 
 <<<<<<< HEAD
@@ -95,6 +93,7 @@ module Flipper
         @adapter_block = ->(adapter) { adapter }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         @app_path = options.fetch(:app_path, '_flipper')
         self.sync_method = options.fetch(:sync_method) { default_sync_method }
@@ -102,6 +101,8 @@ module Flipper
         self.url = options.fetch(:url) { ENV.fetch("FLIPPER_CLOUD_URL", "https://www.flippercloud.io/adapter".freeze) }
 =======
         self.sync_method = options.fetch(:sync_method) { ENV.fetch("FLIPPER_CLOUD_SYNC_METHOD", :poll).to_sym }
+=======
+>>>>>>> 2bf2e82f... Avoid instantiating flipper in initializer
         self.url = options.fetch(:url) { ENV.fetch("FLIPPER_CLOUD_URL", DEFAULT_URL) }
 >>>>>>> 5b26d459... Move default url to constant
       end
